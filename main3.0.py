@@ -26,13 +26,13 @@ with open(csv_filename, 'r') as csvfile:
         ultima_data_message_id = row['data-message-id']
 
 # ByPass para testes
-date = 'Yesterday'
+date = 'Today'
 print(ultima_data_message_id,'-',date)
 
 # Configurações
 url_canal_origem = 'https://web.telegram.org/a/#-1001878941925' 
 telegram_token = '6545127338:AAHVYe1X3Ij1WTytzmFhAdEY05sBoGIJXfA'
-grupo_id = -4083930884
+grupo_id = -4047018375
 
 # Caminho para o perfil personalizado do Chrome
 profile_path = r'C:\Users\Leonardo\AppData\Local\Google\Chrome\User Data\Default'
