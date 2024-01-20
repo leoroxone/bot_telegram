@@ -58,12 +58,12 @@ time.sleep(1)
 pyautogui.press('esc')
 time.sleep(1)
 # Simula 5 pressionamentos da tecla Page Up
-for _ in range(3):
+for _ in range(5):
     pyautogui.press('pageup')
     time.sleep(1)  # Aguarda um segundo entre as teclas para evitar ações rápidas demais
 
 # Simula 5 pressionamentos da tecla Page Down
-for _ in range(5):
+for _ in range(7):
     pyautogui.press('pagedown')
     time.sleep(1)  # Aguarda um segundo entre as teclas para evitar ações rápidas demais
 
