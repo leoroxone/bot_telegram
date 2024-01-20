@@ -34,7 +34,7 @@ telegram_token = '6545127338:AAHVYe1X3Ij1WTytzmFhAdEY05sBoGIJXfA'
 grupo_id = -4083930884
 
 # Caminho para o perfil personalizado do Chrome
-profile_path = '/home/seu_usuario/.config/google-chrome/Default'
+profile_path = '/home/administrator/.config/google-chrome/Default'
 
 # Configurações do Chrome
 chrome_options = Options()
