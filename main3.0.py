@@ -231,8 +231,8 @@ async def enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_mess
         # Verifique se o DataMessageId é maior que o valor salvo
         if data_message_id and int(data_message_id) > int(ultima_data_message_id):
             # Construa a mensagem
-            mensagem = f"{link_bet}" if link_bet else ""
-            texto = f"{message_text}" if message_text else ""
+            mensagem = f"{link_bet.encode('utf-8').decode('utf-8')}" if link_bet else ""
+            texto = f"{message_text.encode('utf-8').decode('utf-8')}" if message_text else ""
 
             # Envie a mensagem e a imagem juntas para o grupo
             if local_imagem:
@@ -243,7 +243,7 @@ async def enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_mess
             # Aguarde um intervalo (por exemplo, 1 segundo) entre cada mensagem para evitar bloqueios
             await asyncio.sleep(1)
     if data_message_id and int(data_message_id) > int(ultima_data_message_id):
-        await bot.send_message(chat_id=grupo_id, text='Envio finalizado')
+        await bot.send_message(chat_id=grupo_id, text='Envio finalizado - João é um viado')
 
 # Caminho do arquivo CSV
 arquivo = 'mensagens.csv'
