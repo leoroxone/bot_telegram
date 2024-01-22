@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import time
+import shutil
 from telegram import Bot
 import pyautogui
 import re
@@ -25,7 +26,7 @@ with open(csv_filename, 'r') as csvfile:
         ultima_data_message_id = row['data-message-id']
 
 # ByPass para testes
-date = 'Yesterday'
+date = 'Today'
 print(ultima_data_message_id,'-',date)
 
 # Configurações
@@ -242,7 +243,7 @@ async def enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_mess
             # Aguarde um intervalo (por exemplo, 1 segundo) entre cada mensagem para evitar bloqueios
             await asyncio.sleep(1)
     if data_message_id and int(data_message_id) > int(ultima_data_message_id):
-        await bot.send_message(chat_id=grupo_id, text='Envio finalizado')
+        await bot.send_message(chat_id=grupo_id, text='Envio finalizado - João é viado')
 
 # Caminho do arquivo CSV
 arquivo = 'mensagens.csv'
@@ -255,7 +256,7 @@ asyncio.run(enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_me
 
 print('Entradas enviadas')
 try:
-    os.remove('imagens')
+    shutil.rmtree('imagens')
     print('Arquivos apagados')
 except:
     print('Arquivos não deletados.')
