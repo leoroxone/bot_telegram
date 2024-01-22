@@ -15,7 +15,7 @@ import uuid
 import os
 
 # Abre o arquivo CSV e obter a última DataMessageId
-csv_filename = 'mensagens.csv'
+csv_filename = 'tips/mensagens.csv'
 ultima_data_message_id = None
 
 with open(csv_filename, 'r') as csvfile:
@@ -30,7 +30,7 @@ date = 'Today'
 print(ultima_data_message_id,'-',date)
 
 # Configurações
-url_canal_origem = 'https://web.telegram.org/a/#-1001878941925' 
+url_canal_origem = 'https://web.telegram.org/a/#-1001682806018' 
 telegram_token = '6545127338:AAHVYe1X3Ij1WTytzmFhAdEY05sBoGIJXfA'
 grupo_id = -4047018375
 
@@ -75,13 +75,13 @@ div_element = driver.find_element('xpath', f'//div[@class="message-date-group" a
 div_html = div_element.get_attribute('outerHTML')
 
 # Salva o conteúdo HTML em um arquivo
-with open('output.html', 'w', encoding='utf-8') as file:
+with open('tips/output.html', 'w', encoding='utf-8') as file:
     file.write(div_html)
 
 def extrair_informacoes(html):
     soup = BeautifulSoup(html, 'html.parser')
 
-    with open('indice_bruto.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('tips/indice_bruto.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['data-message-id', 'message-text', 'link_bet', 'link_img_bet']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -115,13 +115,13 @@ def extrair_informacoes(html):
             })
 
 # Carregar o código HTML do arquivo
-with open('output.html', 'r', encoding='utf-8') as file:
+with open('tips/output.html', 'r', encoding='utf-8') as file:
     codigo_html = file.read()
 
 extrair_informacoes(codigo_html)
 
-input_file = 'indice_bruto.csv'
-output_file = 'indice.csv'
+input_file = 'tips/indice_bruto.csv'
+output_file = 'tips/indice.csv'
 
 with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', encoding='utf-8', newline='') as outfile:
     reader = csv.DictReader(infile)
@@ -134,7 +134,7 @@ with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', e
         row['message-text'] = re.sub(r'https[^\s]*', '', row['message-text'])
         writer.writerow(row)
 
-os.remove('indice_bruto.csv')
+os.remove('tips/indice_bruto.csv')
 
 driver.execute_script("window.open('', '_blank');")
 driver.switch_to.window(driver.window_handles[1])
@@ -157,12 +157,12 @@ def salvar_imagem(html_content, nome_pasta):
     
     return nome_arquivo
 
-# Criar uma pasta para salvar as imagens
-if not os.path.exists('imagens'):
-    os.makedirs('imagens')
+# Criar uma pasta para salvar as tips/imagens
+if not os.path.exists('tips/imagens'):
+    os.makedirs('tips/imagens')
 
 # Abrir o arquivo CSV e criar um novo arquivo CSV para a saída
-with open('indice.csv', 'r') as input_file, open('mensagens.csv', 'w', newline='') as output_file:
+with open('tips/indice.csv', 'r') as input_file, open('tips/mensagens.csv', 'w', newline='') as output_file:
     # Configurar o leitor e escritor CSV
     reader = csv.DictReader(input_file)
     
@@ -188,7 +188,7 @@ with open('indice.csv', 'r') as input_file, open('mensagens.csv', 'w', newline='
             html_content = driver.page_source
             
             # Salvar a imagem usando a função modificada
-            local = salvar_imagem(html_content, 'imagens')
+            local = salvar_imagem(html_content, 'tips/imagens')
             
             # Adicionar o valor corrigido à lista temporária
             row['Local'] = local
@@ -208,8 +208,8 @@ with open('indice.csv', 'r') as input_file, open('mensagens.csv', 'w', newline='
 # Fechar o driver do Selenium
 driver.quit()
 
-os.remove('output.html')
-os.remove('indice.csv')
+os.remove('tips/output.html')
+os.remove('tips/indice.csv')
 
 def ler_csv(file_path):
     with open(file_path, newline='', encoding='utf-8') as csvfile:
@@ -227,6 +227,9 @@ async def enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_mess
         local_imagem = row.get('Local', '')
         data_message_id = row.get('data-message-id', '')
         message_text = row.get('message-text', '')
+
+    if data_message_id and int(data_message_id) > int(ultima_data_message_id):
+        await bot.send_message(chat_id=grupo_id, text='Atenção - Entradas do Grupo Tips')
 
         # Verifique se o DataMessageId é maior que o valor salvo
         if data_message_id and int(data_message_id) > int(ultima_data_message_id):
@@ -246,7 +249,7 @@ async def enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_mess
         await bot.send_message(chat_id=grupo_id, text='Envio finalizado - João é um viado')
 
 # Caminho do arquivo CSV
-arquivo = 'mensagens.csv'
+arquivo = 'tips/mensagens.csv'
 
 # Ler os dados do CSV
 dados_csv = list(csv.DictReader(open(arquivo, 'r')))
@@ -256,7 +259,7 @@ asyncio.run(enviar_mensagens(telegram_token, grupo_id, dados_csv, ultima_data_me
 
 print('Entradas enviadas')
 try:
-    shutil.rmtree('imagens')
+    shutil.rmtree('tips/imagens')
     print('Arquivos apagados')
 except:
     print('Arquivos não deletados.')
